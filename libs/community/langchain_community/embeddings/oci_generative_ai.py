@@ -182,11 +182,15 @@ class OCIGenAIEmbeddings(BaseModel, Embeddings):
         else:
             serving_mode = models.OnDemandServingMode(model_id=self.model_id)
 
+        input_type = None
+        if "input_type" in self.model_kwargs:
+            input_type = self.model_kwargs['input_type']
         invocation_obj = models.EmbedTextDetails(
             serving_mode=serving_mode,
             compartment_id=self.compartment_id,
             truncate=self.truncate,
             inputs=texts,
+            input_type=input_type
         )
 
         response = self.client.embed_text(invocation_obj)
